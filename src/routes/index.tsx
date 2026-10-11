@@ -1,15 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, Eye, EyeOff, ChevronRight, RotateCcw, Scale } from "lucide-react";
-import { categories, vocab, quiz, pipeline, type Category } from "@/lib/vocab";
+import { Search, Eye, EyeOff, ChevronRight, Scale } from "lucide-react";
+import { categories, vocab, pipeline, type Category } from "@/lib/vocab";
+
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { StoryQuiz } from "@/components/story-quiz";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Crime & Legal Terminology — English–Azerbaijani" },
-      { name: "description", content: "Learn crime and legal vocabulary in English with Azerbaijani translations, definitions, a legal flowchart and a quiz." },
+      { name: "description", content: "Learn crime and legal vocabulary in English with Azerbaijani translations, definitions, a legal flowchart and three randomized story quizzes." },
       { property: "og:title", content: "Crime & Legal Terminology — English–Azerbaijani" },
-      { property: "og:description", content: "Interactive crime & legal vocabulary with Azerbaijani translations and a quiz." },
+      { property: "og:description", content: "Interactive crime & legal vocabulary with Azerbaijani translations and three randomized legal story quizzes." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -35,15 +41,18 @@ function Index() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-2">
             <Scale className="h-6 w-6 text-accent" />
             <span className="font-display text-lg font-semibold">Legal Lexicon</span>
           </div>
-          <button onClick={() => setShowAz(!showAz)} className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90">
+          <div className="flex flex-wrap items-center gap-3">
+          <ThemeToggle />
+          <Button onClick={() => setShowAz(!showAz)} className="h-auto whitespace-normal py-2 text-xs sm:text-sm">
             {showAz ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             {showAz ? "Hide" : "Show"} Azerbaijani Translations
-          </button>
+          </Button>
+          </div>
         </div>
       </header>
 
@@ -85,10 +94,10 @@ function Index() {
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           {[{ id: "all" as const, en: "All", az: "Hamısı" }, ...categories].map((c) => (
-            <button key={c.id} onClick={() => setCat(c.id)}
-              className={`rounded-full border px-4 py-1.5 text-sm transition ${cat === c.id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-secondary"}`}>
+            <Button variant="outline" key={c.id} onClick={() => setCat(c.id)}
+              className={`h-auto whitespace-normal border px-4 py-1.5 text-sm transition ${cat === c.id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-secondary"}`}>
               {c.en}{showAz && <span className="opacity-70"> · {c.az}</span>}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -96,10 +105,10 @@ function Index() {
           {list.map((v) => {
             const f = flipped.has(v.en);
             return (
-              <button key={v.en} onClick={() => toggleFlip(v.en)}
-                className="group flex min-h-44 flex-col rounded-2xl border border-border bg-card p-5 text-left transition hover:-translate-y-1 hover:border-accent hover:shadow-lg">
+              <Button variant="outline" key={v.en} onClick={() => toggleFlip(v.en)}
+                className="group flex h-auto min-h-44 items-stretch justify-start whitespace-normal flex-col rounded-lg border border-border bg-card p-5 text-left transition hover:-translate-y-1 hover:border-accent hover:shadow-lg">
                 <div className="flex items-start gap-3">
-                  <div className="rounded-xl bg-secondary p-3 text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
+                  <div className="rounded-lg bg-secondary p-3 text-accent transition group-hover:bg-accent group-hover:text-accent-foreground">
                     <v.icon className="h-6 w-6" />
                   </div>
                   <div>
@@ -108,64 +117,16 @@ function Index() {
                   </div>
                 </div>
                 <p className={`mt-4 text-sm text-muted-foreground transition-opacity ${f ? "opacity-100" : "opacity-0"}`}>{v.def}</p>
-                {!f && <span className="mt-auto text-xs text-muted-foreground">Tap for definition</span>}
-              </button>
+                {!f && <span className="mt-auto text-xs text-muted-foreground">Definition</span>}
+              </Button>
             );
           })}
           {list.length === 0 && <p className="text-muted-foreground">No terms found.</p>}
         </div>
       </section>
 
-      <Quiz />
+      <StoryQuiz />
       <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">Crime & Legal Terminology · Cinayət və Hüquq Terminləri</footer>
     </div>
-  );
-}
-
-function Quiz() {
-  const [i, setI] = useState(0);
-  const [picked, setPicked] = useState<string | null>(null);
-  const [score, setScore] = useState(0);
-  const done = i >= quiz.length;
-  const item = quiz[Math.min(i, quiz.length - 1)]!;
-
-  return (
-    <section className="hero-bg">
-      <div className="mx-auto max-w-3xl px-4 py-16">
-        <h2 className="font-display text-3xl font-semibold text-hero-foreground">Story Quiz: The Midnight Burglary</h2>
-        <p className="mt-2 text-hero-muted">Choose the right word to continue the story.</p>
-        <div className="mt-8 rounded-2xl border border-border bg-card p-6">
-          {done ? (
-            <div className="text-center">
-              <div className="font-display text-4xl font-semibold">{score} / {quiz.length}</div>
-              <p className="mt-2 text-muted-foreground">Case closed!</p>
-              <button onClick={() => { setI(0); setScore(0); setPicked(null); }} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">
-                <RotateCcw className="h-4 w-4" /> Try again
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="text-xs font-semibold text-muted-foreground">CHAPTER {i + 1} OF {quiz.length}</div>
-              <p className="mt-3 text-lg">{item.story}</p>
-              <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                {item.options.map((o) => {
-                  const state = picked == null ? "" : o === item.answer ? "border-success bg-success/15" : o === picked ? "border-destructive bg-destructive/15" : "opacity-50";
-                  return (
-                    <button key={o} disabled={picked != null}
-                      onClick={() => { setPicked(o); if (o === item.answer) setScore((s) => s + 1); }}
-                      className={`rounded-xl border border-border px-4 py-3 text-left transition hover:bg-secondary ${state}`}>{o}</button>
-                  );
-                })}
-              </div>
-              {picked != null && (
-                <button onClick={() => { setI(i + 1); setPicked(null); }} className="mt-5 inline-flex items-center gap-1 rounded-full bg-primary px-5 py-2 text-sm text-primary-foreground">
-                  Next <ChevronRight className="h-4 w-4" />
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </section>
   );
 }

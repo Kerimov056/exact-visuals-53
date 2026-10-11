@@ -56,6 +56,7 @@
   --color-success: var(--success);
   --color-hero-foreground: var(--hero-foreground);
   --color-hero-muted: var(--hero-muted);
+  --color-hero-background: var(--hero-background);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -70,9 +71,10 @@
   --radius: 0.625rem;
   --background: oklch(0.975 0.006 250);
   --foreground: oklch(0.22 0.04 260);
-  --success: oklch(0.62 0.15 150);
-  --hero-foreground: oklch(0.97 0.01 250);
-  --hero-muted: oklch(0.78 0.03 255);
+  --success: oklch(0.45 0.12 150);
+  --hero-background: oklch(0.94 0.014 250);
+  --hero-foreground: oklch(0.22 0.04 260);
+  --hero-muted: oklch(0.44 0.035 255);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
@@ -82,9 +84,9 @@
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.68 0.15 60);
-  --accent-foreground: oklch(0.2 0.04 260);
+  --muted-foreground: oklch(0.46 0.035 257.417);
+  --accent: oklch(0.46 0.105 60);
+  --accent-foreground: oklch(0.98 0.005 250);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
@@ -106,6 +108,11 @@
 }
 
 .dark {
+  color-scheme: dark;
+  --success: oklch(0.78 0.14 150);
+  --hero-background: oklch(0.17 0.025 260);
+  --hero-foreground: oklch(0.97 0.01 250);
+  --hero-muted: oklch(0.79 0.025 255);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);
@@ -118,8 +125,8 @@
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);
   --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  --accent: oklch(0.8 0.12 70);
+  --accent-foreground: oklch(0.2 0.04 260);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 10%);
@@ -152,4 +159,10 @@
 }
 
 @layer base { body { font-family: var(--font-sans); } }
-.hero-bg { background: radial-gradient(ellipse at top right, oklch(0.35 0.08 255), oklch(0.2 0.045 262) 60%); }
+.hero-bg { background: var(--hero-background); }
+
+@media (prefers-reduced-motion: no-preference) {
+  body, .hero-bg, header, button, input {
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+}
