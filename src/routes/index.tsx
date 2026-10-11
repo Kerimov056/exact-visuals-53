@@ -127,7 +127,7 @@ function Quiz() {
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const done = i >= quiz.length;
-  const item = quiz[i];
+  const item = quiz[Math.min(i, quiz.length - 1)]!;
 
   return (
     <section className="hero-bg">
