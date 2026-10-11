@@ -83,17 +83,6 @@ export const vocab: Term[] = [
   t("court", "Minor crime (Misdemeanor)", "Yüngül cinayət / Xırda xətalar", "A less serious offence, such as minor vandalism.", AlertTriangle),
 ];
 
-export const quiz: { story: string; answer: string; options: string[] }[] = [
-  { story: "Late at night, a man broke a window and entered a house to steal jewellery. This crime is called ___.", answer: "Burglary", options: ["Burglary", "Bribery", "Arson", "Fraud"] },
-  { story: "An old lady across the street saw everything. She became the main ___.", answer: "Witness", options: ["Suspect", "Witness", "Judge", "Accomplice"] },
-  { story: "Two days later, detectives went to ___ the crime scene and found fingerprints.", answer: "investigate", options: ["acquit", "testify", "investigate", "surrender"] },
-  { story: "The police found the man and decided to ___ him.", answer: "arrest", options: ["arrest", "acquit", "convict", "bribe"] },
-  { story: "His friend, who drove the getaway car, was charged as an ___.", answer: "Accomplice", options: ["Victim", "Accomplice", "Prosecutor", "Jury"] },
-  { story: "At the trial, the ___ tried to prove the man was guilty.", answer: "Prosecutor", options: ["Defense Attorney", "Witness", "Prosecutor", "Victim"] },
-  { story: "After hearing the evidence, the jury delivered its ___: guilty.", answer: "Verdict", options: ["Probation", "Verdict", "Fine", "Trial"] },
-  { story: "Because it was his first offence, the judge gave him two years of ___ instead of prison.", answer: "Probation", options: ["Probation", "Death penalty", "Life imprisonment", "Smuggling"] },
-];
-
 export const pipeline = [
   { en: "Crime", az: "Cinayət", icon: AlertTriangle, note: "An offender commits a crime." },
   { en: "Investigation", az: "Araşdırma", icon: Search, note: "Police investigate, arrest and charge a suspect." },
